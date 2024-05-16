@@ -57,25 +57,6 @@ def add_item(item_prices):
     clear_item()
     grand_initial_total()
 
-def check_entries():
-    user = name_entry.get()
-    type_of_customer = type_of_customer_Combobox.get()
-    phone_number = phone_number_entry.get()
-
-    if not user :
-        messagebox.showerror("Error", "Please fill in your name")
-        return False
-    if not type_of_customer :
-        messagebox.showerror("Error", "Please fill in your type of customer")
-        return False
-    if not  phone_number:
-        messagebox.showerror("Error", "Please fill in your phone")
-        return False
-    if not phone_number.isdigit():
-        messagebox.showerror("Error", "Phone number must be a number")
-        phone_number_entry.delete(0, tkinter.END)
-        return False
-    return True
 
 window = tkinter.Tk()
 window.title("Invoice Generator by Sekar Bestari Nindita Yasmin (21120123130072)")
