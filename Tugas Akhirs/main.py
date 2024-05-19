@@ -12,7 +12,6 @@ def clear_item() :
     item_prices.get("0.0")
     price_label.config(text="")
 
-
 def add_item(item_prices) :
     quantity = int(quantity_spinbox.get())
     item = item_combobox.get()
@@ -57,11 +56,33 @@ def add_item(item_prices):
     clear_item()
     grand_initial_total()
 
+def check_entries():
+    user = name_entry.get()
+    type_of_customer = type_of_customer_Combobox.get()
+    phone_number = phone_number_entry.get()
+    quantity = int(quantity_spinbox.get())
+
+    if not user :
+        messagebox.showerror("Error", "Please fill in your name")
+        return False
+    if not type_of_customer :
+        messagebox.showerror("Error", "Please fill in your type of customer")
+        return False
+    if not  phone_number:
+        messagebox.showerror("Error", "Please fill in your phone")
+        return False
+    if not phone_number.isdigit():
+        messagebox.showerror("Error", "Phone number must be a number")
+        phone_number_entry.delete(0, tkinter.END)
+        return False
+    if quantity == 0:
+        messagebox.showerror("Error", "The quantity cannot be 0.")
+        return False
+    return True
 
 window = tkinter.Tk()
 window.title("Invoice Generator by Sekar Bestari Nindita Yasmin (21120123130072)")
 window.configure(background="white")
-
 
 frame = tkinter.Frame(window)
 frame.pack(padx=25, pady = 25)
@@ -108,7 +129,6 @@ item_prices = {
     "Bundle ratu 3": 900,
 }
 
-
 item_label = tkinter.Label(frame, text="Item")
 item_label.grid(row=2, column=1)
 
@@ -129,8 +149,8 @@ def update_price(event):
 
 item_combobox.bind("<<ComboboxSelected>>", update_price)
 
-add_item_button = tkinter.Button (frame, text = "Add item", command = lambda: add_item(item_prices))
-add_item_button.grid(row=4, column=1, pady =5)
+add_item_button = tkinter.Button(frame, text="Add item", command=lambda: (check_entries() and add_item(item_prices)))
+add_item_button.grid(row=4, column=1, pady=5)
 
 columns = ('quantity', 'item', 'price', 'total')
 tree = ttk.Treeview(frame, columns=columns, show= "headings")
@@ -146,7 +166,6 @@ initial_total_label.grid(row=6, column=1, sticky= "news", padx=20, pady=10)
 initial_total_entry = tkinter.Entry(frame)
 initial_total_entry.grid(row=6, column=2, sticky= "news", padx=20, pady=10)
 
-
 tax_label= tkinter.Label(frame, text = "tax")
 tax_label.grid(row=7, column=1, sticky = "news", padx=20, pady=5)
 tax_entry = tkinter.Entry(frame)
@@ -161,6 +180,5 @@ save_invoice_button = tkinter.Button(frame, text = "Generate Invoice")
 save_invoice_button.grid(row=10, column=0, columnspan =3, sticky= "news" , pady=5, padx=20)
 new_invoice_button = tkinter.Button(frame, text= "New Invoice", command= new_invoice)
 new_invoice_button.grid(row=11, column= 0, columnspan = 3, sticky = "news", padx= 20, pady =5)
-
 
 window.mainloop()
