@@ -3,7 +3,6 @@ from tkinter import IntVar, ttk
 from datetime import datetime
 from tkinter import messagebox
 
-
 def clear_item() :
     quantity_spinbox.delete(0, tkinter.END)
     quantity_spinbox.insert(0,"1")
@@ -99,7 +98,7 @@ name_entry = tkinter.Entry(frame)
 name_entry.grid (row=1, column= 0)
 
 type_of_customer_Combobox = ttk.Combobox(frame)
-type_of_customer_Combobox['values'] = ('First time', 'Regular', 'VIP')
+type_of_customer_Combobox['values'] = ('First time', 'Regular')
 type_of_customer_Combobox.grid(row=1, column=1)
 
 phone_number_label = tkinter.Label(frame, text= "Phone Number")
@@ -118,15 +117,15 @@ item_label.grid(row=2, column=1)
 item_entry = ttk.Entry(frame)
 item_prices = {
     "Item" : 0, 
-    "Bundle jelata 1": 100,
-    "Bundle jelata 2": 200,
-    "Bundle jelata 3": 300,
-    "Bundle reguler 1": 400,
-    "Bundle reguler 2": 500,
-    "Bundle reguler 3": 600,
-    "Bundle ratu 1": 700,
-    "Bundle ratu 2": 800,
-    "Bundle ratu 3": 900,
+    "Bundle jelata 1": 20,
+    "Bundle jelata 2": 25,
+    "Bundle jelata 3": 30,
+    "Bundle reguler 1": 40,
+    "Bundle reguler 2": 50,
+    "Bundle reguler 3": 60,
+    "Bundle ratu 1": 75,
+    "Bundle ratu 2": 95,
+    "Bundle ratu 3": 125,
 }
 
 item_label = tkinter.Label(frame, text="Item")
