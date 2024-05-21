@@ -1,6 +1,75 @@
 import tkinter
 from tkinter import ttk, messagebox
-from datetime import datetime
+from collections import deque
+import json
+import tkinter as tk
+
+invoice_stack = deque()
+
+def save_invoice_data(invoice_data):
+    with open('invoice_data.json', 'w') as f:
+        json.dump(invoice_data, f)
+
+def load_invoice_data():
+    try:
+        with open('invoice_data.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+
+def generate_invoice():
+    last_saved_invoice = load_invoice_data()
+    if last_saved_invoice:
+        display_invoice(last_saved_invoice)
+        messagebox.showinfo("Success", "Last saved invoice generated successfully!")
+    else:
+        messagebox.showinfo("Info", "No saved invoice found.")
+
+def display_invoice(invoice_data):
+    invoice_window = tk.Toplevel()
+    invoice_window.title("Generated Invoice")
+
+    tk.Label(invoice_window, text="Generating Invoice:").pack()
+    tk.Label(invoice_window, text="--------------------").pack()
+    tk.Label(invoice_window, text="Name: " + invoice_data['name']).pack()
+    tk.Label(invoice_window, text="Type of Customer: " + invoice_data['type_of_customer']).pack()
+    tk.Label(invoice_window, text="Phone Number: " + invoice_data['phone_number']).pack()
+    tk.Label(invoice_window, text="Items:").pack()
+    for item in invoice_data['items']:
+        item_str = f"- {item['quantity']} {item['item']} at IDR {item['price']:.2f} per item"
+        tk.Label(invoice_window, text=item_str).pack()
+    tk.Label(invoice_window, text="Total: " + invoice_data['total']).pack()
+    tk.Label(invoice_window, text="--------------------").pack()
+
+def add_invoice_to_stack():
+    user = get_name()
+    type_of_customer = get_type_of_customer()
+    phone_number = get_phone_number()
+
+    if check_entries():
+        invoice = {
+            'name': user,
+            'type_of_customer': type_of_customer,
+            'phone_number': phone_number,
+            'items': get_invoice_items(),
+            'total': grand_total_entry.get()  
+        }
+
+        invoice_stack.append(invoice)
+        save_invoice_data(invoice)
+        messagebox.showinfo("Success", "Invoice added to the queue.")
+
+def get_invoice_items():
+    items = []
+    for child in tree.get_children():
+        item = {
+            'quantity': tree.item(child)['values'][0],
+            'item': tree.item(child)['values'][1],
+            'price': tree.item(child)['values'][2],
+            'line_total': tree.item(child)['values'][3]
+        }
+        items.append(item)
+    return items
 
 def clear_item():
     quantity_spinbox.delete(0, tkinter.END)
@@ -162,9 +231,16 @@ grand_total_label.grid(row=9, column=1, sticky="news", padx=20, pady=5)
 grand_total_entry = tkinter.Entry(frame)
 grand_total_entry.grid(row=9, column=2, sticky="news", padx=20, pady=5)
 
-save_invoice_button = tkinter.Button(frame, text="Generate Invoice")
+def save_invoice():
+    add_invoice_to_stack()
+    messagebox.showinfo("Success", "Invoice saved successfully!")
+
+save_invoice_button = tkinter.Button(frame, text="Save Invoice", command=save_invoice)
 save_invoice_button.grid(row=10, column=0, columnspan=3, sticky="news", pady=5, padx=20)
+generate_invoice_button = tkinter.Button(frame, text="Generate Invoice", command=generate_invoice)
+generate_invoice_button.grid(row=11, column=0, columnspan=3, sticky="news", pady=5, padx=20)
 new_invoice_button = tkinter.Button(frame, text="New Invoice", command=new_invoice)
-new_invoice_button.grid(row=11, column=0, columnspan=3, sticky="news", padx=20, pady=5)
+new_invoice_button.grid(row=12, column=0, columnspan=3, sticky="news", padx=20, pady=5)
+
 
 window.mainloop()
