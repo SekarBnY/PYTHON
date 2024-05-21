@@ -42,9 +42,9 @@ def update_totals():
     grand_total_entry.insert(0, f"IDR {grand_total:.2f}")
 
 def check_entries():
-    user = name_entry.get()
-    type_of_customer = type_of_customer_combobox.get()
-    phone_number = phone_number_entry.get()
+    user = get_name()
+    type_of_customer = get_type_of_customer()
+    phone_number = get_phone_number()
 
     if not user:
         messagebox.showerror("Error", "Please fill in your name")
@@ -65,6 +65,26 @@ def update_price(event):
     selected_item = item_combobox.get()
     price = item_prices.get(selected_item, 0)
     price_label.config(text=f"IDR {price:.2f}")
+
+def get_name():
+    return name_entry.get()
+
+def set_name(name):
+    name_entry.delete(0, tkinter.END)
+    name_entry.insert(0, name)
+
+def get_type_of_customer():
+    return type_of_customer_combobox.get()
+
+def set_type_of_customer(customer_type):
+    type_of_customer_combobox.set(customer_type)
+
+def get_phone_number():
+    return phone_number_entry.get()
+
+def set_phone_number(phone_number):
+    phone_number_entry.delete(0, tkinter.END)
+    phone_number_entry.insert(0, phone_number)
 
 window = tkinter.Tk()
 window.title("Invoice Generator by Sekar Bestari Nindita Yasmin (21120123130072)")
